@@ -4,7 +4,7 @@
 winexe
 C#
 .cs
-C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\TwitterCrawl\obj\Debug\
+C:\Users\Daniel\Source\Repos\TwitterCrawl\TwitterCrawl\obj\Debug\
 TwitterCrawl
 none
 false
@@ -13,7 +13,7 @@ DEBUG;TRACE
 11151548125
 
 101043974093
-85-363109534
+85-1475766861
 MainWindow.xaml;
 
 False

@@ -35,7 +35,7 @@ namespace TwitterCrawl
         private void TwitterSampleStream()
         {
             ListWordsByFrequency frequencyList = new ListWordsByFrequency();
-            var logFile = System.IO.File.ReadAllLines("C:\\Users\\Daniel\\Desktop\\positive-words.txt");
+            var logFile = System.IO.File.ReadAllLines(@"C:\Users\Daniel\Source\Repos\TwitterCrawl\positive-words.txt");
             List <string> StringList = new List<string>(logFile);
             Globals.Stream = Stream.CreateSampleStream();
             int incomming = 0;
@@ -48,17 +48,27 @@ namespace TwitterCrawl
                     incomming++;
                     label.Content = incomming;
                     label1.Content = success;
-                    bool test = StringList.Any(args.Tweet.ToString().Contains);
 
+                    string tweet = args.Tweet.ToString();
+                    bool test = StringList.Any(tweet.Contains);
+            
                     if (test)
                     {
                         success++;
                         txtBxTwitterFeed.Clear();
-                        txtBxTwitterFeed.Text = args.Tweet.ToString();
-                                                
-                        //frequencyList.split(args.Tweet.ToString());
-                        //rTxtBxFrequency.Document.Blocks.Clear();
-                        //rTxtBxFrequency.Document.Blocks.Add(new Paragraph(new Run(frequencyList.output)));
+                        txtBxTwitterFeed.Text = tweet;
+
+                        var matchingvalues = StringList.FindAll(tweet.Contains);
+
+                        StringBuilder builder = new StringBuilder();
+                        foreach (string v in matchingvalues) // Loop through all strings
+                        {
+                            builder.Append(v).Append(" "); // Append string to StringBuilder
+                        }
+
+                        frequencyList.split(builder.ToString());
+                        rTxtBxFrequency.Document.Blocks.Clear();
+                        rTxtBxFrequency.Document.Blocks.Add(new Paragraph(new Run(frequencyList.output)));
                     }
 
                 }));

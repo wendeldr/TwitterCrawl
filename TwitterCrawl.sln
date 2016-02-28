@@ -1,13 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterCrawl", "TwitterCrawl\TwitterCrawl.csproj", "{69EB8123-5663-4DE5-AAC7-87B4115EEAA8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomExtentions", "CustomExtentions\CustomExtentions.csproj", "{075595A8-46A0-4CB8-8607-B7F822DFD943}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomExtentionsStringExtentionsTests", "CustomExtentionsStringExtentionsTests\CustomExtentionsStringExtentionsTests.csproj", "{90605791-CD96-4242-80BD-85F439DB657D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C17485D9-E5B9-4174-9E53-D00CEF338CAC}"
+	ProjectSection(SolutionItems) = preProject
+		positive-words.txt = positive-words.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

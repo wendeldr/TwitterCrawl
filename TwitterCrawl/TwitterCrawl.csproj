@@ -132,7 +132,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="twokenize.py" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xaml">
