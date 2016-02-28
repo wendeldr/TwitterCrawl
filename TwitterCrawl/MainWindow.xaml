@@ -32,6 +32,8 @@
 
         <Button x:Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" Width="32" Click="btnStart_Click" Height="21" Grid.Column="1"/>
         <Button x:Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="5,36,0,0" VerticalAlignment="Top" Width="32" Click="btnStop_Click" Height="20" Grid.Column="1"/>
+        <Label x:Name="label" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,84,0,0" Grid.Column="1"/>
+        <Label x:Name="label1" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="0,137,0,0"/>
 
 
 

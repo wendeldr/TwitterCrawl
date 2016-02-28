@@ -1,0 +1,5 @@
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentions\bin\Debug\CustomExtentions.dll
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentions\bin\Debug\CustomExtentions.pdb
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentions\obj\Debug\CustomExtentions.dll
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentions\obj\Debug\CustomExtentions.pdb
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentions\obj\Debug\CustomExtentions.csprojResolveAssemblyReference.cache

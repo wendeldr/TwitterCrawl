@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using Tweetinvi;
 using Tweetinvi.Core.Interfaces.Streaminvi;
 using LanguageProcessing;
+using CustomExtentions;
+using System.Text.RegularExpressions;
 
 
 namespace TwitterCrawl
@@ -33,17 +35,32 @@ namespace TwitterCrawl
         private void TwitterSampleStream()
         {
             ListWordsByFrequency frequencyList = new ListWordsByFrequency();
+            var logFile = System.IO.File.ReadAllLines("C:\\Users\\Daniel\\Desktop\\positive-words.txt");
+            List <string> StringList = new List<string>(logFile);
             Globals.Stream = Stream.CreateSampleStream();
+            int incomming = 0;
+            int success = 0;
+
             Globals.Stream.TweetReceived += (sender, args) =>
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    txtBxTwitterFeed.Clear();
+                    incomming++;
+                    label.Content = incomming;
+                    label1.Content = success;
+                    bool test = StringList.Any(args.Tweet.ToString().Contains);
 
-                    txtBxTwitterFeed.Text = args.Tweet.ToString();
-                    frequencyList.split(args.Tweet.ToString());
-                    rTxtBxFrequency.Document.Blocks.Clear();
-                    rTxtBxFrequency.Document.Blocks.Add(new Paragraph(new Run(frequencyList.output)));
+                    if (test)
+                    {
+                        success++;
+                        txtBxTwitterFeed.Clear();
+                        txtBxTwitterFeed.Text = args.Tweet.ToString();
+                                                
+                        //frequencyList.split(args.Tweet.ToString());
+                        //rTxtBxFrequency.Document.Blocks.Clear();
+                        //rTxtBxFrequency.Document.Blocks.Add(new Paragraph(new Run(frequencyList.output)));
+                    }
+
                 }));
             };
         }

@@ -73,14 +73,16 @@ namespace TwitterCrawl
 
             SetupTwitter(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
-            //ShowConsole(); // Show the console window (for Win App projects)
+            ShowConsole(); // Show the console window (for Win App projects)
 
 
             string s = @"I'm quite heavily emotionally invested in this baby penguin, and if anything happens to him, I will NEVER forgive Kate Winslet. 
                 #SnowChick That was the best New Year's broadcast I've ever done? 
-                You all ABSOLUTELY ROCK THE FUCKING HOUSE, See you all next time. < 3 < 3 < 3, 
+                You all ABSOLUTELY ROCK THE FUCKING HOUSE, See you all next time. < 3 <3 < 3, 
                 www.google.com , 1.0, U.N.K.L.E., 12:53 sevadus@sevadus.tv, dougie_wendelken@yahoo.com ";
-            Twokenize.tokenize(s);
+
+            //var temp = Tokenize.WhitespaceTokenize(s);
+            //Tokenize.tokenize(s);
             //Console.WriteLine("Opening window...");
             InitializeWindows(); // opens the WPF window and waits here
             //Console.WriteLine("Exiting main...");

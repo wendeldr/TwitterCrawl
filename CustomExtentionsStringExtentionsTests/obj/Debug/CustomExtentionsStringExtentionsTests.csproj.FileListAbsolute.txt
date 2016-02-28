@@ -1,0 +1,8 @@
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentionsStringExtentionsTests\bin\Debug\CustomExtentionsStringExtentionsTests.dll
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentionsStringExtentionsTests\bin\Debug\CustomExtentionsStringExtentionsTests.pdb
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentionsStringExtentionsTests\bin\Debug\CustomExtentions.dll
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentionsStringExtentionsTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentionsStringExtentionsTests\bin\Debug\CustomExtentions.pdb
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentionsStringExtentionsTests\obj\Debug\CustomExtentionsStringExtentionsTests.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentionsStringExtentionsTests\obj\Debug\CustomExtentionsStringExtentionsTests.dll
+C:\Users\Daniel\Documents\Visual Studio 2015\Projects\Stock\CustomExtentionsStringExtentionsTests\obj\Debug\CustomExtentionsStringExtentionsTests.pdb

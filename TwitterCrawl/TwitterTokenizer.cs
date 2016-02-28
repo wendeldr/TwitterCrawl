@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace TwitterCrawl
 {
@@ -24,14 +25,15 @@ namespace TwitterCrawl
     /// 
     /// There have been at least 2 other Java ports, but they are not in the lineage for the code here.
     /// </summary>
-    public static class Twokenize
+    public static class Tokenize
     {
-        internal static Regex Contractions = new Regex("(?i)(\\w+)(n['’′]t|['’′]ve|['’′]ll|['’′]d|['’′]re|['’′]s|['’′]m)$");
+        internal static Regex Contractions = new Regex("(\\w+)(n['’′]t|['’′]ve|['’′]ll|['’′]d|['’′]re|['’′]s|['’′]m)$", RegexOptions.IgnoreCase);
         internal static Regex Whitespace = new Regex("[\\s\\p{Zs}]+");
 
         internal static string punctChars = "['\"“”‘’.?!…,:;]";
         //static String punctSeq   = punctChars+"+";	//'anthem'. => ' anthem '.
         internal static string punctSeq = "['\"“”‘’]+|[.?!,…]+|[:;]+"; //'anthem'. => ' anthem ' .
+        //internal static string punctSeq = @"([""'])(?:(?=(\\?))\2.)*?\1";
         internal static string entity = "&(?:amp|lt|gt|quot);";
         //  URLs
 
@@ -53,7 +55,7 @@ namespace TwitterCrawl
         internal static string timeLike = "\\d+(?::\\d+){1,2}";
         //static String numNum     = "\\d+\\.\\d+";
         internal static string numberWithCommas = "(?:(?<!\\d)\\d{1,3},)+?\\d{3}" + "(?=(?:[^,\\d]|$))";
-        internal static string numComb = "\\p{Sc}?\\d+(?:\\.\\d+)+%?";
+        internal static string numDecimal = "\\p{Sc}?\\d+(?:\\.\\d+)+%?";
 
         // Abbreviations
         internal static string boundaryNotDot = "(?:$|\\s|[“\\u0022?!,:;]|" + entity + ")";
@@ -81,7 +83,7 @@ namespace TwitterCrawl
         }
 
         //  Emoticons
-        internal static string normalEyes = "(?iu)[:=]"; // 8 and x are eyes but cause problems
+        internal static string normalEyes = "[:=]"; // 8 and x are eyes but cause problems
         internal static string wink = "[;]";
         internal static string noseArea = "(?:|-|[^a-zA-Z0-9 ])"; // doesn't get :'-(
         internal static string happyMouths = "[D\\)\\]\\}]+";
@@ -99,7 +101,7 @@ namespace TwitterCrawl
         internal static string s3 = "(?:--['\"])";
         internal static string s4 = "(?:<|&lt;|>|&gt;)[\\._-]+(?:<|&lt;|>|&gt;)";
         internal static string s5 = "(?:[.][_]+[.])";
-        internal static string basicface = "(?:(?i)" + bfLeft + bfCenter + bfRight + ")|" + s3 + "|" + s4 + "|" + s5;
+        internal static string basicface = "(?:" + bfLeft + bfCenter + bfRight + ")|" + s3 + "|" + s4 + "|" + s5;
 
         internal static string eeLeft = "[＼\\\\ƪԄ\\(（<>;ヽ\\-=~\\*]+";
         internal static string eeRight = "[\\-=\\);'\\u0022<>ʃ）/／ノﾉ丿╯σっµ~\\*]+";
@@ -111,13 +113,13 @@ namespace TwitterCrawl
         // Standard version  :) :( :] :D :P
         // reversed version (: D:  use positive lookbehind to remove "(word):"
         // because eyes on the right side is more ambiguous with the standard usage of : ;
-        //inspired by http://en.wikipedia.org/wiki/User:Scapler/emoticons#East_Asian_style
+        //inspired by http://en.wikipedia.org/wiki/User:Scapler/emoticons#East_Asian_stylez
         // iOS 'emoji' characters (some smileys, some symbols) [\ue001-\uebbb]  
         // TODO should try a big precompiled lexicon from Wikipedia, Dan Ramage told me (BTO) he does this
 
         internal static string Hearts = "(?:<+/?3+)+"; //the other hearts are in decorations
 
-        internal static string Arrows = "(?:<*[-―—=]*>+|<+[-―—=]*>*)|\\p{InArrows}+";
+        internal static string Arrows = "(?:<*[-―—=]*>+|<+[-―—=]*>*)|[\\u2190-\\u21ff]+";
 
         // BTO 2011-06: restored Hashtag, AtMention protection (dropped in original scala port) because it fixes
         // "hello (#hashtag)" ==> "hello (#hashtag )"  WRONG
@@ -141,8 +143,11 @@ namespace TwitterCrawl
 
         // We will be tokenizing using these regexps as delimiters
         // Additionally, these things are "protected", meaning they shouldn't be further split themselves.
-        internal static Regex Protected = new Regex(OR(Hearts, url, Email)); //, timeLike, numberWithCommas, numComb, emoticon, Arrows, entity, punctSeq, arbitraryAbbrev, separators, decorations, embeddedApostrophe, Hashtag, AtMention));
+        internal static Regex Protected = new Regex(OR(url, Email, timeLike, numberWithCommas, numDecimal, punctSeq, embeddedApostrophe, Hashtag, AtMention), RegexOptions.IgnoreCase);
         //numNum,
+        //Hearts,
+        //emoticon, Arrows, entity,
+        //arbitraryAbbrev, separators, decorations,
 
         // Edge punctuation
         // Want: 'foo' => ' foo '
@@ -178,8 +183,9 @@ namespace TwitterCrawl
             }
         }
 
+
         // The main work of tokenizing a tweet.
-        private static IList<string> simpleTokenize(string text)
+        private static IList<string> SimpleTokenize(string text)
         {
 
             // Do the no-brainers first
@@ -193,11 +199,62 @@ namespace TwitterCrawl
 
             // Find the matches for subsequences that should be protected,
             // e.g. URLs, 1.0, U.N.K.L.E., 12:53
-            MatchCollection mat = Protected.Matches(splitPunctText);
-            string[] matches = Protected.Split(splitPunctText);
+
+            //string[] matches = Protected.Split(splitPunctText);
+
+            MatchCollection matchs = Protected.Matches(splitPunctText);
+
             //Storing as List[List[String]] to make zip easier later on 
             IList<IList<string>> bads = new List<IList<string>>(); //linked list?
             IList<Pair<int?, int?>> badSpans = new List<Pair<int?, int?>>();
+
+
+            foreach(Group match in matchs)
+            {
+                Debug.WriteLine(match.Value);
+            }
+            /*bads = []
+    badSpans = []
+    for match in Protected.finditer(splitPunctText):
+        # The spans of the "bads" should not be split.
+        if (match.start() != match.end()): #unnecessary?
+            bads.append( [splitPunctText[match.start():match.end()]] )
+            badSpans.append( (match.start(), match.end()) )
+
+    # Create a list of indices to create the "goods", which can be
+    # split. We are taking "bad" spans like 
+    #     List((2,5), (8,10)) 
+    # to create 
+    #     List(0, 2, 5, 8, 10, 12)
+    # where, e.g., "12" here would be the textLength
+    # has an even length and no indices are the same
+    indices = [0]
+    for (first, second) in badSpans:
+        indices.append(first)
+        indices.append(second)
+    indices.append(textLength)
+
+    # Group the indices and map them to their respective portion of the string
+    splitGoods = []
+    for i in range(0, len(indices), 2):
+        goodstr = splitPunctText[indices[i]:indices[i+1]]
+        splitstr = goodstr.strip().split(" ")
+        splitGoods.append(splitstr)
+
+    #  Reinterpolate the 'good' and 'bad' Lists, ensuring that
+    #  additonal tokens from last good item get included
+    zippedStr = []
+    for i in range(len(bads)):
+        zippedStr = addAllnonempty(zippedStr, splitGoods[i])
+        zippedStr = addAllnonempty(zippedStr, bads[i])
+    zippedStr = addAllnonempty(zippedStr, splitGoods[len(bads)])
+*/
+
+
+
+
+
+
             //while (matches.find())
             //{
             //    //The spans of the "bads" should not be split.
@@ -270,10 +327,20 @@ namespace TwitterCrawl
         }
         /// <summary>
         /// "foo   bar " => "foo bar" </summary>
-        public static string squeezeWhitespace(string input)
+        public static string SqueezeWhitespace(string input)
         {
             return Whitespace.Replace(input, " ");
         }
+
+        public static string[] WhitespaceTokenize(string text)
+        {
+            return SqueezeWhitespace(text).Split(' ');
+        }
+
+        //public static string RemovePunctuation(string text)
+        //{
+
+        //}
 
         // Final pass tokenization based on special patterns
         //private static IList<string> splitToken(string token)
@@ -293,7 +360,7 @@ namespace TwitterCrawl
         /// Assume 'text' has no HTML escaping. * </summary>
         public static IList<string> tokenize(string text)
         {
-            return simpleTokenize(squeezeWhitespace(text));
+            return SimpleTokenize(SqueezeWhitespace(text));
         }
 
 
